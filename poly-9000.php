@@ -31,6 +31,9 @@ if (!file_exists($poly9000_autoload)) {
 }
 
 require_once $poly9000_autoload;
+// Required explicitly: Composer's files autoload runs only one copy of this
+// package per request, so the version gate would never see the others.
+require_once POLY9000_DIR . 'vendor/lauzis/wp-plugin-packages/bootstrap.php';
 
 if (!defined('POLY9000_LOG_PATH')) {
     // Under uploads/, never inside the plugin directory: WordPress deletes and
