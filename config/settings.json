@@ -1,0 +1,56 @@
+{
+  "sections": [
+    {
+      "id": "languages",
+      "title": "Languages",
+      "description": "Which languages content is translated into, and what the source is assumed to be.",
+      "fields": [
+        {
+          "id": "source_language",
+          "type": "text",
+          "title": "Source Language",
+          "default_value": "@callback:poly9000_site_language",
+          "help_text": "Language code the original content is written in. Defaults to the site language.",
+          "help_text_args": ["@callback:poly9000_site_language"]
+        },
+        {
+          "id": "target_languages",
+          "type": "complex",
+          "title": "Target Languages",
+          "help_text": "One entry per language you want translations produced in.",
+          "fields": [
+            { "id": "code", "type": "text", "title": "Language code" },
+            { "id": "label", "type": "text", "title": "Display name" }
+          ]
+        },
+        {
+          "id": "post_types",
+          "type": "set",
+          "title": "Post Types to Translate",
+          "options": "@callback:poly9000_post_type_options",
+          "default_value": ["post", "page"],
+          "help_text": "Only these post types offer a translate action."
+        }
+      ]
+    },
+    {
+      "id": "behaviour",
+      "title": "Translation",
+      "fields": [
+        {
+          "id": "preserve_markup",
+          "type": "checkbox",
+          "title": "Preserve HTML markup",
+          "default_value": true,
+          "help_text": "Ask the model to keep tags, attributes and shortcodes untouched and translate only the text between them."
+        },
+        {
+          "id": "extra_instructions",
+          "type": "textarea",
+          "title": "Extra Instructions",
+          "help_text": "Appended to every translation request. Use it for tone, terminology or names that should not be translated."
+        }
+      ]
+    }
+  ]
+}
