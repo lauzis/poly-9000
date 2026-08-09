@@ -31,6 +31,9 @@ if (!file_exists($poly9000_autoload)) {
 }
 
 require_once $poly9000_autoload;
+// Required explicitly: Composer's files autoload runs only one copy of this
+// package per request, so the version gate would never see the others.
+require_once POLY9000_DIR . 'vendor/lauzis/wp-plugin-packages/bootstrap.php';
 
 if (!defined('POLY9000_LOG_PATH')) {
     // Under uploads/, never inside the plugin directory: WordPress deletes and
@@ -67,3 +70,19 @@ add_action('init', ['\Poly9000\Admin', 'init']);
 add_action('plugins_loaded', static function (): void {
     load_plugin_textdomain('poly-9000', false, dirname(plugin_basename(__FILE__)) . '/languages');
 });
+
+// The plugin's version in the admin footer, beside WordPress's own — the first
+// thing worth knowing about a page misbehaving is which version drew it.
+add_action( 'admin_init', static function () {
+    if ( ! class_exists( '\\Lauzis\\WpPackages\\Admin\\Footer' ) ) {
+        return;
+    }
+
+    \Lauzis\WpPackages\Admin\Footer::show(
+        'poly-9000',
+        array(
+            'name'    => 'Poly 9000',
+            'version' => defined( 'POLY9000_VERSION' ) ? POLY9000_VERSION : '',
+        )
+    );
+} );
