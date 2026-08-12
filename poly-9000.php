@@ -64,6 +64,20 @@ add_action('admin_menu', static function (): void {
         'dashicons-translation',
         81
     );
+
+    // Only when there is something to read, and it stays while old files
+    // remain: switching logging off is often exactly when somebody wants to
+    // look at what it caught.
+    if (\Poly9000\Logs::hasSomethingToShow()) {
+        add_submenu_page(
+            POLY9000_SLUG,
+            __('Logs', 'poly-9000'),
+            __('Logs', 'poly-9000'),
+            'manage_options',
+            POLY9000_SLUG . '-logs',
+            ['\Poly9000\Logs', 'renderPage']
+        );
+    }
 }, 5);
 
 add_action('init', ['\Poly9000\Admin', 'init']);

@@ -40,28 +40,51 @@ class Logs
     }
 
     /**
-     * The log, as a panel for the settings page.
+     * Whether the Logs screen is worth a menu entry.
      *
-     * The listing is the shared package's, because every plugin here writes the
-     * same log and would otherwise grow its own reader for it. What stays here
-     * is whether to show it and what happens when somebody clears it.
+     * Not simply "is logging on": switching it off should not take away the log
+     * it already wrote, which is usually the moment somebody wants to read it.
      */
-    public static function panel(): string
+    public static function hasSomethingToShow(): bool
     {
         $logger = self::logger();
 
+        if (!$logger) {
+            return false;
+        }
+
+        return $logger->isEnabled() || (bool) $logger->files();
+    }
+
+    /**
+     * The Logs screen.
+     *
+     * A page of its own rather than a panel on the settings page: settings are
+     * what the plugin will do, and a log is what it did. The listing itself is
+     * the shared package's, since every plugin here writes the same log.
+     */
+    public static function renderPage(): void
+    {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        $logger = self::logger();
+
+        echo '<div class="wrap"><h1>' . esc_html__('Poly 9000 — Logs', 'poly-9000') . '</h1>';
+
         if (!$logger || !class_exists('\\Lauzis\\WpPackages\\Logs\\Viewer')) {
             // An older copy of the shared package won the version race — see
-            // WpPackages_Registry. The rest of the page still works, so this
-            // says what is missing rather than fataling.
-            return '<p class="description">'
-                . esc_html__('The log reader needs a newer copy of the shared package than the one running.', 'poly-9000')
-                . '</p>';
+            // WpPackages_Registry. Said plainly rather than fataling.
+            echo '<p>' . esc_html__('The log reader needs a newer copy of the shared package than the one running.', 'poly-9000') . '</p></div>';
+
+            return;
         }
 
         $viewer = new \Lauzis\WpPackages\Logs\Viewer($logger, ['clear' => 'poly9000_clear_logs']);
 
-        return $viewer->render();
+        echo $viewer->render(); // Escaped by the viewer, field by field.
+        echo '</div>';
     }
 
     /** Empties the log, from the button on that panel. */
