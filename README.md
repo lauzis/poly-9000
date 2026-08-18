@@ -32,6 +32,9 @@ keeps credentials out of WordPress entirely, since the script owns its own.
 
 ## Changelog
 
+### 0.3.1
+- Added a **Send a test message** button beside the Slack webhook field. It posts to whatever is in the field, saved or not, waits for Slack's answer and reports it — log traffic is fire-and-forget, so a webhook Slack rejects otherwise fails silently.
+
 ### 0.3.0
 - Log entries can be sent to **Slack**. An incoming webhook URL and an errors-only/every-entry choice on the Logging settings; errors are posted even with file logging off. Only `https://` URLs are used — the webhook URL is itself a credential. Sending is fire-and-forget, so a translation run never waits on Slack, and a webhook Slack rejects fails quietly.
 - Bundled shared library updated to wp-plugin-packages 1.15.0.
