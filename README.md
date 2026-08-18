@@ -30,6 +30,16 @@ Then configure a provider under **Poly 9000 → Settings → AI Provider**. Eith
 hosted provider with an access key, or a local command — the commandline option
 keeps credentials out of WordPress entirely, since the script owns its own.
 
+## Changelog
+
+### 0.3.0
+- Log entries can be sent to **Slack**. An incoming webhook URL and an errors-only/every-entry choice on the Logging settings; errors are posted even with file logging off. Only `https://` URLs are used — the webhook URL is itself a credential. Sending is fire-and-forget, so a translation run never waits on Slack, and a webhook Slack rejects fails quietly.
+- Bundled shared library updated to wp-plugin-packages 1.15.0.
+
+### 0.2.0
+- Added a **Logs** page, and the log is shown on the Logging settings tab.
+- The plugin version is shown in the admin footer.
+
 ## Next
 
 - Choose what to translate: a per-post action, a bulk action, or a queue.

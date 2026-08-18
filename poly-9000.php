@@ -3,7 +3,7 @@
  * Plugin Name: Poly 9000
  * Plugin URI:  https://github.com/lauzis/poly-9000
  * Description: Translates posts and pages using a language model.
- * Version:     0.1.0
+ * Version:     0.3.0
  * Author:      Aivars Lauzis
  * Text Domain: poly-9000
  * Domain Path: /languages
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('POLY9000_VERSION', '0.1.0');
+define('POLY9000_VERSION', '0.3.0');
 define('POLY9000_DIR', plugin_dir_path(__FILE__));
 define('POLY9000_URL', plugin_dir_url(__FILE__));
 define('POLY9000_SLUG', 'poly-9000');
@@ -52,6 +52,7 @@ add_action('after_setup_theme', static function (): void {
 // Carbon Fields fires this on init at priority 0, so it must be attached before
 // init runs rather than from inside an init callback.
 add_action('carbon_fields_register_fields', ['\Poly9000\Settings', 'register']);
+add_action('admin_post_poly9000_clear_logs', ['\Poly9000\Logs', 'handleClear']);
 
 add_action('admin_menu', static function (): void {
     add_menu_page(
@@ -63,6 +64,20 @@ add_action('admin_menu', static function (): void {
         'dashicons-translation',
         81
     );
+
+    // Only when there is something to read, and it stays while old files
+    // remain: switching logging off is often exactly when somebody wants to
+    // look at what it caught.
+    if (\Poly9000\Logs::hasSomethingToShow()) {
+        add_submenu_page(
+            POLY9000_SLUG,
+            __('Logs', 'poly-9000'),
+            __('Logs', 'poly-9000'),
+            'manage_options',
+            POLY9000_SLUG . '-logs',
+            ['\Poly9000\Logs', 'renderPage']
+        );
+    }
 }, 5);
 
 add_action('init', ['\Poly9000\Admin', 'init']);
