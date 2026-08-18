@@ -3,7 +3,7 @@
  * Plugin Name: Poly 9000
  * Plugin URI:  https://github.com/lauzis/poly-9000
  * Description: Translates posts and pages using a language model.
- * Version:     0.2.0
+ * Version:     0.3.0
  * Author:      Aivars Lauzis
  * Text Domain: poly-9000
  * Domain Path: /languages
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('POLY9000_VERSION', '0.2.0');
+define('POLY9000_VERSION', '0.3.0');
 define('POLY9000_DIR', plugin_dir_path(__FILE__));
 define('POLY9000_URL', plugin_dir_url(__FILE__));
 define('POLY9000_SLUG', 'poly-9000');
